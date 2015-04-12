@@ -25,16 +25,16 @@ class NasdaqSpider(scrapy.Spider):
           item['symbol'] = href.split('/')[-1].encode('utf-8')
           item['ratio'] = self.parse_ratio(detail[0])
           item['exdate'] = datetime.strptime(detail[2].encode('utf-8'), '%m/%d/%Y')
-          
+          item['event'] = "split"
           if(item['ratio']>1):
             item['forwardSplit'] = True
           else:
             item['forwardSplit'] = False
 
           if(item['exdate']>datetime.today()):
-            item['executed'] = True
-          else:
             item['executed'] = False
+          else:
+            item['executed'] = True
           
           yield item
 
@@ -51,11 +51,11 @@ class NasdaqSpider(scrapy.Spider):
         out = re.findall('\d+', ratio)
         
         if ratio[-1]!='%':
-          return int(out[0])/int(out[1]) 
+            return int(out[0])/int(out[1]) 
         else:
-          try:
-            return float(out[0])/100
-          except:
-            return float(0)
+            try:
+                return float(out[0])/100
+            except:
+                return float(0)
          
 

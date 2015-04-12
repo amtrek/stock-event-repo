@@ -18,4 +18,5 @@ class SplitEvent(scrapy.Item):
     href = scrapy.Field()
     exdate = scrapy.Field()
     executed = scrapy.Field()
+    event = scrapy.Field()
     pass

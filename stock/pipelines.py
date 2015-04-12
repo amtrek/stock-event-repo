@@ -18,14 +18,32 @@ class MongoDBPipeline(object):
                 )
         db = connection[settings['MONGODB_DB']]
         self.collection = db[settings['MONGODB_COLLECTION']]
-        
+     
     def process_item(self, item, spider):
         
-        #validate data
-        isValid = validate(item) 
-        
-        if(isValid):
-            self.collection.insert(dict(item))
-            log.msg('Insert item into database',level=log.DEBUG, spider = spider)
+        #If data exist: skip else, add or update
+        self.spider = spider
+        data = dict(item)
+        symbol = data.pop('symbol',None)
+        event  = data.pop('event',None)
 
+
+        if  self.collection.find({'_id':symbol}).count()==0:
+            
+            self.addEvent(symbol,event,data)
+        else:
+            self.updateEvent(symbol,event,date)
+        
         return item
+
+
+    
+    def addEvent(self,symbol,event,data):
+        
+        self.collection.insert({'_id': symbol,'split':[data]})
+        log.msg('Insert stock symbol '+symbol+'with Event '+event,level = log.DEBUG, spider = self.spider)
+
+    def updateEvent(self,symbol,event,data):
+        
+        self.collection.update({'_id':symbol},{'$addToSet':{'split': data}})
+        log.msg('Update stock symbol '+symbol+'with Event '+event,level = log.DEBUG, spider = self.spider)
