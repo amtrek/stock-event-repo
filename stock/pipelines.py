@@ -17,7 +17,7 @@ class MongoDBPipeline(object):
                 settings['MONGODB_PORT']
                 )
         db = connection[settings['MONGODB_DB']]
-        self.collection = db[settings['MONGODB_COLLECTION']]
+        self.collection = db[settings['MONGODB_COLLECTION_EVENT']]
      
     def process_item(self, item, spider):
         
@@ -32,7 +32,7 @@ class MongoDBPipeline(object):
             
             self.addEvent(symbol,event,data)
         else:
-            self.updateEvent(symbol,event,date)
+            self.updateEvent(symbol,event,data)
         
         return item
 

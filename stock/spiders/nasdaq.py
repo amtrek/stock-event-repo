@@ -19,13 +19,14 @@ class NasdaqSpider(scrapy.Spider):
         split_detail = response.xpath('//tr/td/text()').extract()
         split_detail = [detail.replace(u'\xa0','N/A') for detail in split_detail if not "\n" in detail]
         split_detail = self.groups(split_detail,4)
-        print split_detail 
+
         for href, detail in map(None,hrefs,split_detail):
           item = SplitEvent()
-          item['symbol'] = href.split('/')[-1].encode('utf-8')
+          item['symbol'] = href.split('/')[-1].encode('utf-8').upper()
           item['ratio'] = self.parse_ratio(detail[0])
           item['exdate'] = datetime.strptime(detail[2].encode('utf-8'), '%m/%d/%Y')
           item['event'] = "split"
+        
           if(item['ratio']>1):
             item['forwardSplit'] = True
           else:

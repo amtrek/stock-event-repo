@@ -17,7 +17,7 @@ ITEM_PIPELINES = ['stock.pipelines.MongoDBPipeline',]
 MONGODB_SERVER = "localhost"
 MONGODB_PORT = 27017
 MONGODB_DB = "stock"
-MONGODB_COLLECTION = "event"
-
+MONGODB_COLLECTION_EVENT = "event"
+MONGODB_COLLECTION_BASIC = "fundmental"
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'stock (+http://www.yourdomain.com)'
