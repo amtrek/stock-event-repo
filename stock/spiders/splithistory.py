@@ -42,7 +42,7 @@ class SplithistorySpider(scrapy.Spider):
             exdates = self.get_exdate(response)
             
             for ratio, exdate in map ( None,ratios, exdates ):
-                :wq                item = SplitEvent()
+                item = SplitEvent()
                 item['symbol'] = symbol
                 item['ratio'] = ratio
                 item['exdate'] = exdate
